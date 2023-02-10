@@ -5,11 +5,28 @@ import Container from '@components/Container'
 import Logo from '@components/icons/Logo'
 import Button from '@components/Button'
 import HamburgerIcon from '@components/HamburgerIcon'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { cn } from 'utils/cn'
 
 export default function Header() {
   const [hamburgerMenuIsopen, setHamburgerMenuIsopen] = useState(false)
+
+  useEffect(() => {
+    const html = document.querySelector('html')
+    html?.classList.toggle('overflow-hidden', hamburgerMenuIsopen)
+  }, [hamburgerMenuIsopen])
+
+  useEffect(() => {
+    const closeHamburgerNavigation = () => setHamburgerMenuIsopen(false)
+
+    window.addEventListener('orientationchange', closeHamburgerNavigation)
+    window.addEventListener('resize', closeHamburgerNavigation)
+
+    return () => {
+      window.removeEventListener('orientationchange', closeHamburgerNavigation)
+      window.removeEventListener('resize', closeHamburgerNavigation)
+    }
+  }, [hamburgerMenuIsopen])
 
   return (
     <header className="fixed top-0 left-0 w-full border-b border-white-a08 backdrop-blur-[12px]">
@@ -25,15 +42,17 @@ export default function Header() {
         >
           <nav
             className={cn(
-              'fixed left-0 top-[var(--navigation-height)] h-[calc(100vh_-_var(--navigation-height))] w-full bg-background transition-opacity duration-500 md:relative md:top-0 md:block md:h-auto md:w-auto md:bg-transparent md:opacity-100',
-              hamburgerMenuIsopen ? 'opacity-100' : 'opacity-0'
+              'fixed left-0 top-[var(--navigation-height)] h-[calc(100vh_-_var(--navigation-height))] w-full bg-background transition-opacity duration-500 md:relative md:top-0 md:block md:h-auto md:w-auto md:translate-x-0 md:bg-transparent md:opacity-100',
+              hamburgerMenuIsopen
+                ? 'translate-x-0 opacity-100'
+                : 'translate-x-[-100vw] opacity-0'
             )}
           >
             <ul
               className={cn(
                 'flex h-full flex-col md:flex-row md:items-center md:border-none md:[&_a]:text-sm [&_li]:border-b [&_li]:border-grey-dark',
-                '[&_a]:flex [&_a]:h-[var(--navigation-height)] [&_a]:w-full [&_a]:translate-y-5 [&_a]:items-center [&_a]:font-medium [&_a]:transition-[color,transform] [&_a]:duration-300 md:[&_a]:translate-y-0 [&_li]:ml-6 [&_a:hover]:text-grey',
-                hamburgerMenuIsopen ? '[&_a]:translate-y-0' : ''
+                'ease-in [&_a]:flex [&_a]:h-[var(--navigation-height)] [&_a]:w-full [&_a]:translate-y-5 [&_a]:items-center [&_a]:font-medium [&_a]:transition-[color,transform] [&_a]:duration-300 md:[&_a]:translate-y-0 [&_li]:ml-6 [&_a:hover]:text-grey',
+                hamburgerMenuIsopen && '[&_a]:translate-y-0'
               )}
             >
               <li>
