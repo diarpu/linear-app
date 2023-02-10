@@ -1,0 +1,26 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@font-face {
+  font-family: 'Linear';
+  font-weight: 400 800;
+  font-display: swap;
+  src: url(/fonts/Linear.woff2) format('woff2');
+}
+
+@layer base {
+  :root {
+    --navigation-height: 48px;
+  }
+
+  html {
+    @apply bg-background font-sans text-white;
+  }
+}
+
+@layer utilities {
+  .text-shadow {
+    text-shadow: rgb(0 0 0 / 56%) 0px 3px 12px;
+  }
+}
